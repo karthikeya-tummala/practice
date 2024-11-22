@@ -32,7 +32,12 @@ async function createCourse() {
 }
 
 async function getCourses(){
-    const courses = await Course.find();
+    const courses = await Course
+        .findOneAndUpdate();
+        // .find({author: 'Karthik', isPublished: true})
+        // .limit(10)
+        // .sort({name: 1})
+        // .countDocuments();
     console.log(courses);
 }
 
