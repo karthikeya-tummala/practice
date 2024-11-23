@@ -1,35 +1,37 @@
 const mongoose = require('mongoose');
-const {mongo} = require("mongoose");
+
 mongoose.connect('mongodb://localhost/mongo-exercises')
-    .then(() => console.log("Connected to MongoDB"))
-    .catch(err => console.log('Error:', err));
+.then('Connected to MongoDB')
+.catch(err => console.log("Error:", err));
 
 mongoose.connection.on('connected', () => {
-    console.log(`Connected to database ${mongoose.connection.name}`);
+   console.log(`Connected to database ${mongoose.connection.name}`);
 });
 
-const courseSchema = new mongoose.Schema({
+const courseSchema = {
     name: String,
-    author: String,
-    isPublished: Boolean,
     tags: [String],
+    author: String,
     date: Date,
-    price: Number
-});
+    price: Number,
+    isPublished: Boolean
+};
 
-const Course = mongoose.model('Course', courseSchema);
+const Course = new mongoose.model('course', courseSchema);
 
-async function getCourses(){
-    return await Course
-        .find({isPublished: true, tags:'backend'})
-        .sort('name')
-        // .select({name: 1, author: 1}) or
-        .select('name author');
+async function getCourses() {
+    return Course
+        .find({isPublished: true})
+        .or([
+            {price: {$gte: 15}},
+            {name: /.*by.*/i}
+        ]);
 }
 
 async function run(){
-    const courses = await getCourses();
-    console.log(courses);
+    const result = await getCourses();
+    console.log(result);
+    await mongoose.disconnect();
 }
 
 run();
