@@ -43,8 +43,8 @@ async function getCourses(){
         // .sort({name: 1})
         // .countDocuments();
     console.log(courses);
+    await mongoose.disconnect();
 }
 
 // createCourse();
-console.log('EOP');
 getCourses();
