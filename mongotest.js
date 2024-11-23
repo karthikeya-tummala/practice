@@ -24,7 +24,7 @@ async function createCourse() {
         name: 'C Course',
         author: 'Karthik',
         tags: ['General Programming'],
-        isPublished: true
+        isPublished: true,
     });
 
     const result = await course.save()
@@ -33,7 +33,11 @@ async function createCourse() {
 
 async function getCourses(){
     const courses = await Course
-        .findOneAndUpdate();
+        .findOneAndUpdate(
+            {name: /.*Java.*/i},
+            {$set: {tags: ['Mobile Development', 'Backend Development']}},
+            {new: true}
+        );
         // .find({author: 'Karthik', isPublished: true})
         // .limit(10)
         // .sort({name: 1})
@@ -42,5 +46,5 @@ async function getCourses(){
 }
 
 // createCourse();
-
+console.log('EOP');
 getCourses();
